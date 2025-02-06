@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "start": "electron ."
   },
@@ -20,6 +21,9 @@
     "electron": "^34.0.2"
   },
   "dependencies": {
-    "pdf-parse": "^1.1.1"
+    "node-tesseract-ocr": "^2.2.1",
+    "pdf-img-convert": "^2.0.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.10.38"
   }
 }

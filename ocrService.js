@@ -1,10 +1,8 @@
 // ocrService.js
-const fs = require('fs');
-const path = require('path');
-const pdfConvert = require('pdf-img-convert');
-const tesseract = require('node-tesseract-ocr');
-
-const { extractDigitalPdfText } = require('./pdfExtract');
+import fs from 'fs';
+import path from 'path';
+import tesseract from 'node-tesseract-ocr';
+import { extractDigitalPdfText } from './pdfExtract.js';
 
 async function pdfToTextOrOcr(pdfPath) {
   // 1) pdf-parse로 디지털 텍스트 추출 시도
@@ -15,9 +13,10 @@ async function pdfToTextOrOcr(pdfPath) {
   if (digitalText.replace(/\s/g, "").length > 50) {
     return digitalText;
   }
-
+  /* 
   // 3) 텍스트가 거의 없으면 스캔본일 가능성이 높으므로 OCR 수행
-  const images = await pdfConvert(pdfPath, { scale: 2 });
+  const pdfConvert = await import('pdf-img-convert');
+  const images = await pdfConvert.default(pdfPath, { scale: 2 });
   let fullText = "";
 
   for (let i = 0; i < images.length; i++) {
@@ -35,6 +34,8 @@ async function pdfToTextOrOcr(pdfPath) {
     fullText += text + "\n";
     fs.unlinkSync(tempFileName);
   }
+  */
+  const fullText = "";
   return fullText;
 }
 
@@ -49,6 +50,4 @@ async function convertPdfAndSave(pdfPath, outputDir) {
   return txtPath;
 }
 
-module.exports = {
-  convertPdfAndSave
-};
+export { convertPdfAndSave };

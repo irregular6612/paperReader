@@ -1,6 +1,6 @@
 // pdfExtract.js
-const fs = require('fs');
-const pdf = require('pdf-parse');
+import fs from 'fs';
+import pdf from 'pdf-parse';
 
 async function extractDigitalPdfText(pdfPath) {
   const dataBuffer = fs.readFileSync(pdfPath);
@@ -9,6 +9,4 @@ async function extractDigitalPdfText(pdfPath) {
   return data.text || "";
 }
 
-module.exports = {
-  extractDigitalPdfText
-};
+export { extractDigitalPdfText };

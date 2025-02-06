@@ -1,7 +1,9 @@
 // main.js
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
-const { convertPdfAndSave } = require('./ocrService');
+import { app, BrowserWindow, ipcMain } from 'electron';
+import path from 'path';
+import { convertPdfAndSave } from './ocrService.js';
+
+const __dirname = path.resolve();
 
 function createWindow() {
   const win = new BrowserWindow({
