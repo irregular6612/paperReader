@@ -1,43 +1,41 @@
-// Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
-const path = require('node:path')
+// main.js
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const { convertPdfAndSave } = require('./ocrService');
 
-function createWindow () {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 1000,
+    height: 700,
     webPreferences: {
+      // Renderer에서 Node.js API를 직접 쓰지 않고,
+      // preload.js 통해서만 IPC를 사용하게 하는 보안 설정
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     }
-  })
+  });
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  win.loadFile('index.html');
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
+});
 
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
+// 모든 창이 닫히면 앱 종료
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit()
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+// Renderer -> Main으로 오는 IPC
+ipcMain.handle('convert-pdf', async (event, { pdfPath, outputDir }) => {
+  try {
+    const savedTxtPath = await convertPdfAndSave(pdfPath, outputDir);
+    return { success: true, savedTxtPath };
+  } catch (err) {
+    return { success: false, error: err.message || String(err) };
+  }
+});

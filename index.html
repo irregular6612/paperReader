@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
-    <link href="./styles.css" rel="stylesheet">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+<head>
+  <meta charset="utf-8" />
+  <title>PDF to Text (Tesseract OCR)</title>
+</head>
+<body>
+  <h1>PDF to TXT Converter</h1>
 
-    <!-- You can also require other files to run in this process -->
-    <script src="./renderer.js"></script>
-  </body>
+  <div id="dropZone" style="width: 80%; height: 200px; border: 2px dashed #aaa; display: flex; align-items: center; justify-content: center;">
+    <p>Drag & Drop PDF here</p>
+  </div>
+
+  <p>
+    <label for="outputDir">Output Folder (optional):</label>
+    <input type="text" id="outputDir" placeholder="e.g. C:/output (빈칸이면 현재폴더)" style="width: 300px;">
+  </p>
+
+  <button id="selectBtn">Select PDF File</button>
+  <input type="file" id="fileInput" accept="application/pdf" style="display:none;" />
+
+  <div>
+    <button id="convertBtn">Convert to .txt</button>
+  </div>
+
+  <div id="status"></div>
+
+  <script src="renderer.js"></script>
+</body>
 </html>
