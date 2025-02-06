@@ -8,8 +8,11 @@
  */
 
 // preload.js
-import { contextBridge, ipcRenderer } from 'electron';
-
+const { contextBridge, ipcRenderer } = require('electron')
+// Renderer 프로세스에 노출할 API 정의
 contextBridge.exposeInMainWorld('electronAPI', {
-  convertPdf: (pdfPath, outputDir) => ipcRenderer.invoke('convert-pdf', { pdfPath, outputDir })
-});
+  convertPdf: (pdfPath, outputDir) => 
+    ipcRenderer.invoke('convert-pdf', { pdfPath, outputDir }),
+  selectDirectory: () => 
+    ipcRenderer.invoke('select-directory')
+})

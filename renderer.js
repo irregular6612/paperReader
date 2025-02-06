@@ -32,8 +32,10 @@ dropZone.addEventListener('drop', (e) => {
   dropZone.style.borderColor = '#aaa';
 
   const file = e.dataTransfer.files[0];
-  if (file && file.type === 'application/pdf') {
-    selectedPdfPath = file.path;
+  console.log(file);
+  if (file && file.name.toLowerCase().endsWith('.pdf')) {
+    //have to be changed
+    selectedPdfPath = '../../../Downloads/Human-AI-Feedback-Loops.pdf';
     statusDiv.innerText = `Selected PDF: ${selectedPdfPath}`;
   } else {
     statusDiv.innerText = 'Please drop a PDF file.';
@@ -41,14 +43,28 @@ dropZone.addEventListener('drop', (e) => {
 });
 
 // ========== 파일 선택 버튼 ==========
-selectBtn.addEventListener('click', () => {
+selectBtn.addEventListener('click', (event) => {
   fileInput.click();
+  event.preventDefault();
+
+  const file = event.dataTransfer.files[0];
+  console.log(file);
+  if (file && file.name.toLowerCase().endsWith('.pdf')) {
+    
+    //selectedPdfPath = file.path;
+    //have to be changed
+    selectedPdfPath = '../../../Downloads/Human-AI-Feedback-Loops.pdf';
+    statusDiv.innerText = `Selected PDF: ${selectedPdfPath}`;
+  } else {
+    statusDiv.innerText = 'Please drop a PDF file.';
+  }
 });
 
 fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
-  if (file && file.type === 'application/pdf') {
-    selectedPdfPath = file.path;
+  if (file && file.name.toLowerCase().endsWith('.pdf')) {
+    //have to be changed
+    selectedPdfPath = '../../../Downloads/Human-AI-Feedback-Loops.pdf';
     statusDiv.innerText = `Selected PDF: ${selectedPdfPath}`;
   } else {
     statusDiv.innerText = 'Please select a PDF file.';
@@ -62,7 +78,8 @@ convertBtn.addEventListener('click', async () => {
     return;
   }
 
-  const outputDir = outputDirInput.value.trim() || null;
+  const defaultDir = '../../../Downloads/';
+  let outputDir = outputDirInput.value.trim() || defaultDir;
   statusDiv.innerText = 'Converting... This may take a while.';
 
   try {
